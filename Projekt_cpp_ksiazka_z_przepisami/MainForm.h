@@ -58,6 +58,7 @@ namespace Projektcppksiazkazprzepisami {
 
 
 	private: System::Windows::Forms::Button^ button5;
+	private: System::Windows::Forms::Button^ button3;
 
 
 
@@ -85,6 +86,7 @@ namespace Projektcppksiazkazprzepisami {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// button1
@@ -121,7 +123,7 @@ namespace Projektcppksiazkazprzepisami {
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(242, 381);
+			this->button4->Location = System::Drawing::Point(208, 381);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(65, 10);
 			this->button4->TabIndex = 4;
@@ -139,11 +141,21 @@ namespace Projektcppksiazkazprzepisami {
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &MainForm::button5_Click);
 			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(293, 263);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(139, 58);
+			this->button3->TabIndex = 8;
+			this->button3->Text = L"Usuń";
+			this->button3->UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(484, 429);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->button2);
@@ -215,8 +227,9 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 
 	this->Hide();
 	przeglad ^objprzeglad = gcnew przeglad(this);
+	objprzeglad->StartPosition = FormStartPosition::Manual; // Pozycja
+	objprzeglad->Location = this->Location;                //
 	
-
 	String^ nazwa_przepisu = listBox1->SelectedItem->ToString();
 	
 	conn->Open();

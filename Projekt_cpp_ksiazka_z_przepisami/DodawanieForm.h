@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "SkladnikiForm.h"
 
+
 namespace Projektcppksiazkazprzepisami {
 
 	using namespace System;
@@ -20,6 +21,7 @@ namespace Projektcppksiazkazprzepisami {
 	{
 	public:
 		Form ^obj;
+		String^ nazwa = "";
 		DodawanieForm(void)
 		{
 			InitializeComponent();
@@ -61,7 +63,8 @@ namespace Projektcppksiazkazprzepisami {
 
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
+	private: System::Windows::Forms::Label^ label2;
+
 
 
 
@@ -94,7 +97,7 @@ namespace Projektcppksiazkazprzepisami {
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
-			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->label2 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -172,18 +175,26 @@ namespace Projektcppksiazkazprzepisami {
 			this->pictureBox1->Location = System::Drawing::Point(43, 140);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(346, 191);
+			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->pictureBox1->TabIndex = 10;
 			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Click += gcnew System::EventHandler(this, &DodawanieForm::pictureBox1_Click);
 			// 
-			// openFileDialog1
+			// label2
 			// 
-			this->openFileDialog1->FileName = L"openFileDialog1";
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(43, 367);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(44, 16);
+			this->label2->TabIndex = 11;
+			this->label2->Text = L"label2";
 			// 
 			// DodawanieForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(589, 417);
+			this->Controls->Add(this->label2);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
@@ -251,6 +262,7 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	MySqlDataReader^ reader = cmd1->ExecuteReader();
 
 	reader->Read();
+	String^ id_string = reader->GetString(0);
 	int^ id = reader->GetInt32(0);
 
 	conn->Close();
@@ -263,6 +275,21 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 
 	objSk->ShowDialog();
 
+
+	System::IO::Directory::CreateDirectory(id_string);
+
+	if (nazwa != "")
+	{
+		Bitmap^ bit = gcnew Bitmap(nazwa);
+		SaveFileDialog^ zapisek = gcnew SaveFileDialog;
+		String^ tytul = id_string + "\\" + "tytul.png";
+		bit->Save(tytul);
+
+	}
+
+
+
+
 }
 private: System::Void textBox2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
@@ -273,24 +300,40 @@ private: System::Void openFileDialog1_FileOk(System::Object^ sender, System::Com
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 	Stream^ Mystreamdodatek;
-	//OpenFileDialog^ openFileDialogDodatek = gcnew OpenFileDialog;
-	
+	OpenFileDialog^ openFileDialogDodatek = gcnew OpenFileDialog;
+	//openFileDialogDodatek->ShowDialog();
+
+	//openFileDialogDodatek->InitialDirectory = "c:\\";
+	//openFileDialogDodatek->Filter = "txt files (*.txt)|*.txt|All files(*.*)|*.*";
+	//openFileDialogDodatek->FilterIndex = 2;
+	//openFileDialogDodatek->RestoreDirectory = true;
 	
 
-	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	if (openFileDialogDodatek->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 	{
-		if ((Mystreamdodatek = openFileDialog1->OpenFile()) != nullptr)
+		if ((Mystreamdodatek = openFileDialogDodatek->OpenFile()) != nullptr)
 		{
-		 
+			
+			nazwa = openFileDialogDodatek->FileName;
+
+
+
 		Mystreamdodatek->Close();
 		}
 		
 	}
 
+	label2->Text = nazwa;
+	Bitmap^ bit = gcnew Bitmap(nazwa);
+	pictureBox1->Image = bit;
+	
+
 }
 private: System::Void openFileDialog1_FileOk_1(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 
 
+}
+private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

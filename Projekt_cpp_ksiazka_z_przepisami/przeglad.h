@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "DodawanieForm.h"
+#include <string>
 
 namespace Projektcppksiazkazprzepisami {
 
@@ -21,7 +22,10 @@ namespace Projektcppksiazkazprzepisami {
 	private: System::Windows::Forms::Label^ label1;
 	public:
 		Form ^obj;
-	
+	private: System::Windows::Forms::PictureBox^ pictureBox1;
+	private: System::Windows::Forms::Button^ button3;
+	public:
+
 		   int^ Id_przepisu;
 		przeglad(void)
 		{
@@ -72,6 +76,9 @@ namespace Projektcppksiazkazprzepisami {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->checkedListBox1 = (gcnew System::Windows::Forms::CheckedListBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// button1
@@ -116,18 +123,39 @@ namespace Projektcppksiazkazprzepisami {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(366, 163);
+			this->label2->Location = System::Drawing::Point(307, 313);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(95, 16);
 			this->label2->TabIndex = 5;
 			this->label2->Text = L"Przygotowanie";
 			this->label2->Click += gcnew System::EventHandler(this, &przeglad::label2_Click);
 			// 
+			// pictureBox1
+			// 
+			this->pictureBox1->Location = System::Drawing::Point(280, 17);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(290, 273);
+			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+			this->pictureBox1->TabIndex = 6;
+			this->pictureBox1->TabStop = false;
+			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(19, 424);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(108, 36);
+			this->button3->TabIndex = 7;
+			this->button3->Text = L"Edytuj";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &przeglad::button3_Click);
+			// 
 			// przeglad
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(667, 472);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->checkedListBox1);
 			this->Controls->Add(this->label1);
@@ -136,6 +164,7 @@ namespace Projektcppksiazkazprzepisami {
 			this->Name = L"przeglad";
 			this->Text = L"przeglad";
 			this->Load += gcnew System::EventHandler(this, &przeglad::przeglad_Load);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -222,6 +251,14 @@ namespace Projektcppksiazkazprzepisami {
 		label1->Text = Nazwa_przepisu;
 		//cmd->ExecuteNonQuery();
 		conn->Close();
+		String^ direct = Id_przepisu + "\\" + "tytul.png";
+		if (File::Exists(direct))
+		{
+			
+			Bitmap^ bit = gcnew Bitmap(direct);
+			pictureBox1->Image = bit;
+		}
+		
 		
 
 	}
@@ -230,6 +267,8 @@ private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e)
 private: System::Void checkedListBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

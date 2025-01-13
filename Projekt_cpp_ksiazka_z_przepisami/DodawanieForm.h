@@ -2,6 +2,8 @@
 #include "SkladnikiForm.h"
 
 
+
+
 namespace Projektcppksiazkazprzepisami {
 
 	using namespace System;
@@ -22,6 +24,8 @@ namespace Projektcppksiazkazprzepisami {
 	public:
 		Form ^obj;
 		String^ nazwa = "";
+		int^ EdycjaDodawanie;
+		int^ IDDodawanie;
 		DodawanieForm(void)
 		{
 			InitializeComponent();
@@ -225,6 +229,11 @@ namespace Projektcppksiazkazprzepisami {
 	}
 
 	private: System::Void DodawanieForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		//
+		//Przejściowy^ objprzejs = gcnew Przejściowy(this);
+		
+			
+			
 		
 
 		
@@ -247,46 +256,48 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 
 	//Plik->Close();
 	
-	
-
 	String^ Nazwa = textBox2->Text;
-	conn->Open();
-
-	String^ cmdString = "INSERT INTO Wszystkie_przepisy (Nazwa_przepisu) VALUES (@Nazwa)";
-	MySqlCommand^ cmd = gcnew MySqlCommand(cmdString, conn);
-
-	cmd->Parameters->AddWithValue("@Nazwa", Nazwa);
-	cmd->ExecuteNonQuery();
-	String^ cmd1String = "SELECT LAST_INSERT_ID()";
-	MySqlCommand^ cmd1 = gcnew MySqlCommand(cmd1String, conn);
-	MySqlDataReader^ reader = cmd1->ExecuteReader();
-
-	reader->Read();
-	String^ id_string = reader->GetString(0);
-	int^ id = reader->GetInt32(0);
-
-	conn->Close();
-	this->Hide();
-	SkladnikiForm^ objSk = gcnew SkladnikiForm();
-
 	
+		
+		conn->Open();
 
-	objSk->Numer = id;
+		String^ cmdString = "INSERT INTO Wszystkie_przepisy (Nazwa_przepisu, Istnienie) VALUES (@Nazwa, @Istnienie)";
+		MySqlCommand^ cmd = gcnew MySqlCommand(cmdString, conn);
 
-	objSk->ShowDialog();
+		cmd->Parameters->AddWithValue("@Nazwa", Nazwa);
+		cmd->Parameters->AddWithValue("@Istnienie", "Tak");
+		cmd->ExecuteNonQuery();
+		String^ cmd1String = "SELECT LAST_INSERT_ID()";
+		MySqlCommand^ cmd1 = gcnew MySqlCommand(cmd1String, conn);
+		MySqlDataReader^ reader = cmd1->ExecuteReader();
+
+		reader->Read();
+		String^ id_string = reader->GetString(0);
+		int^ id = reader->GetInt32(0);
+
+		conn->Close();
+		this->Hide();
+		SkladnikiForm^ objSk1 = gcnew SkladnikiForm();
+
+		
+
+		objSk1->Numer = id;
+
+		objSk1->ShowDialog();
 
 
-	System::IO::Directory::CreateDirectory(id_string);
+		System::IO::Directory::CreateDirectory(id_string);
 
-	if (nazwa != "")
-	{
-		Bitmap^ bit = gcnew Bitmap(nazwa);
-		SaveFileDialog^ zapisek = gcnew SaveFileDialog;
-		String^ tytul = id_string + "\\" + "tytul.png";
-		bit->Save(tytul);
+		if (nazwa != "")
+		{
+			Bitmap^ bit = gcnew Bitmap(nazwa);
+			SaveFileDialog^ zapisek = gcnew SaveFileDialog;
+			String^ tytul = id_string + "\\" + "tytul.png";
+			bit->Save(tytul);
 
-	}
-
+		}
+	
+	
 
 
 
